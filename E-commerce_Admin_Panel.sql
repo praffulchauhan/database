@@ -89,6 +89,7 @@ create table invoice(
 
 /*----------------------------------CREATING-Trigger-FUNCTION--------------------------------------*/
 
+
              CREATE OR REPLACE FUNCTION fn_generate_invoice_log()
                       RETURNS TRIGGER
                       LANGUAGE PLPGSQL
@@ -97,10 +98,7 @@ create table invoice(
                         BEGIN
 						
                           
-                                insert into invoice(invoice_id,product_name,total,date_created) values ((select order_id from orders where order_id=1),
-																										(select product_name from orders where order_id=1), 
-																										(select total from orders where order_id=1),
-																										(select date_created from orders where order_id=1));
+                                insert into invoice(invoice_id,product_name,total,date_created) values (new.order_id,new.product_name,new.total,new.date_created);
                               RETURN NEW;
                               END;
 							  
@@ -118,9 +116,4 @@ insert into orders(order_id,product_name,total,date_created)
            values(1,(select product_name from products where product_id=1),1000.00,now());
 select * from orders	
 select * from invoice																									
-select order_id from orders where order_id=1
-delete from invoice where invoice_id=1
-
-
-
 
